@@ -9,6 +9,7 @@ declare module "*.less";
 declare module "*.scss";
 declare module "*.sass";
 declare module "*.styl";
+declare module "*.vue";
 declare interface PageConfig {
   navigationBarBackgroundColor?: string // 导航栏背景颜色，如 #000000	
   navigationBarTextStyle?: 'black' | 'white' // 导航栏标题颜色，仅支持 black / white	

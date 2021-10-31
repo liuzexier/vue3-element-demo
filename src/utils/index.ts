@@ -7,6 +7,7 @@ import {
 import { throttle } from './throttle'
 import { debounce } from './debounce'
 import { logColor } from './log'
+import { validate } from './validate'
 
 export {
   logColor,
@@ -16,4 +17,5 @@ export {
   postJson,
   putJson,
   deleteJson,
+  validate,
 }
