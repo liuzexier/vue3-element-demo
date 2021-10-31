@@ -4,7 +4,7 @@ function getHostUrl() {
 
   switch (env) {
     case 'dev':
-      return ''
+      return 'http://192.168.124.9:8080'
     case 'development':
       return ''
     case 'test':

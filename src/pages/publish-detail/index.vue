@@ -1,16 +1,28 @@
 <template>
   <view class="publist-detail-c">
-    <view class="title">标题</view>
-    <view
-      class="content"
-    >绿色的法看;烧腊店付款了法撒旦;咖啡豆是;阿里咖啡豆是;拉伸法撒旦;'发送卡;'暗示分离快乐水;大疯狂的萨克发啥啊打开方式大开口;四方达撒;代理费按时代付款拉萨到付款沙发;'萨达发送到了安抚'</view>
+    <!-- <view class="title">标题</view> -->
+    <view class="content">{{ info.content }}</view>
   </view>
 </template>
 <script lang='ts'>
-import { defineComponent } from 'vue'
+import { getPublishInfo } from '@/service/PublishService'
+import { Current } from '@tarojs/taro'
+import { defineComponent, reactive } from 'vue'
 export default defineComponent({
   setup() {
-
+    const id: any = Current.page?.options?.id
+    const info: any = reactive({})
+    function getData() {
+      getPublishInfo({
+        id
+      }).then(res => {
+        Object.assign(info, res.data)
+      })
+    }
+    getData()
+    return {
+      info
+    }
   }
 })
 </script>

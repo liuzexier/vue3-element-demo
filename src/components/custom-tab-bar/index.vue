@@ -55,6 +55,26 @@ export default defineComponent({
         selectedIconPath: require('@/assets/image/tabbar/setting-s.svg')
       }
     ])
+    const baseList: any[] = [
+      {
+        pagePath: 'pages/tabbar/publish/index',
+        text: '公告',
+        iconPath: require('@/assets/image/tabbar/publish.svg'),
+        selectedIconPath: require('@/assets/image/tabbar/publish-s.svg')
+      },
+      {
+        pagePath: 'pages/tabbar/liuyan/index',
+        text: '留言',
+        iconPath: require('@/assets/image/tabbar/liuyan.svg'),
+        selectedIconPath: require('@/assets/image/tabbar/liuyan-s.svg')
+      },
+      {
+        pagePath: 'pages/tabbar/setting/index',
+        text: '设置',
+        iconPath: require('@/assets/image/tabbar/setting.svg'),
+        selectedIconPath: require('@/assets/image/tabbar/setting-s.svg')
+      }
+    ]
     const teacherList: any[] = reactive([
       {
         pagePath: 'pages/tabbar/publish/index',
@@ -84,8 +104,10 @@ export default defineComponent({
     const list = computed(() => {
       if (role.value === 'teacher') {
         return teacherList
-      } else {
+      } else if (role.value === 'student') {
         return studentList
+      } else {
+        return baseList
       }
     })
     const selectedColor = '#333'

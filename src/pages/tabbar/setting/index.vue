@@ -5,14 +5,17 @@
         <svg-icon width="50" height="50" :data="require('@icons/icon-mine.svg')"></svg-icon>
       </view>
       <view class="right">
-        <view class="title no-overflow">立卡决胜巅峰离开范德萨立卡决胜巅峰离开范德萨立卡决胜巅峰离开范德萨</view>
-        <view class="desc no-overflow">立卡决胜巅峰离开范德萨立卡决胜巅峰离开范德萨立卡决胜巅峰离开范德萨</view>
+        <view class="title no-overflow">{{ userInfo.username }}</view>
+        <view class="desc no-overflow">{{ userInfo.phone }}</view>
       </view>
     </view>
     <view class="menu-c">
       <nut-cell-group>
-        <nut-cell title="切换账号" is-link @tap="handleLogin"></nut-cell>
-        <nut-cell title="退出登录" @tap="handleLogout"></nut-cell>
+        <nut-cell v-if="role === ''" title="登录" @tap="handleLogin"></nut-cell>
+        <template v-else>
+          <nut-cell title="切换账号" is-link @tap="handleLogin"></nut-cell>
+          <nut-cell title="退出登录" @tap="handleLogout"></nut-cell>
+        </template>
       </nut-cell-group>
     </view>
   </view>
@@ -20,21 +23,27 @@
 </template>
 <script lang="ts">
 import { useRole } from '@/common/useRole'
-// import { navigateTo } from '@tarojs/taro'
+import { useUserInfo } from '@/common/useUserInfo'
+import { removeStorageSync } from '@tarojs/taro'
+import { navigateTo } from '@tarojs/taro'
 import { defineComponent } from 'vue'
 export default defineComponent({
   setup() {
-    const { setRole } = useRole()
+    const { role } = useRole()
+    const { userInfo } = useUserInfo()
+    const { setUserInfo } = useUserInfo()
     function handleLogin() {
-      setRole('student')
-      // navigateTo({
-      //   url: `/pages/login/index`
-      // })
+      navigateTo({
+        url: `/pages/login/index`
+      })
     }
     function handleLogout() {
-      // TODO: 退出登录
+      removeStorageSync('bearer')
+      setUserInfo({})
     }
     return {
+      role,
+      userInfo,
       handleLogin,
       handleLogout
     }

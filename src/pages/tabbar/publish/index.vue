@@ -2,11 +2,10 @@
   <view class="publish-c">
     <scroll-view class="public-s" :scroll-y="true" @scrolltolower="handleLoadMore">
       <view class="scroll-c">
-        <view class="card-c card" v-for="(item) in 14" :key="item" @tap="handleViewDetail(item)">
-          <view class="title no-overflow">21313131</view>
-          <view
-            class="content webline-2"
-          >是法撒旦法师法的数量sad接口发了;沙发垫了;开发萨达拉什福德啊李帅大富科技爱上的看法就爱上了放得开;开发萨达拉什福德啊李帅大富科技爱上的看法就爱上了放得开</view>
+        <view class="card-c card" v-for="(item) in list" :key="item.id" @tap="handleViewDetail(item)">
+          <!-- <view class="title no-overflow">21313131</view> -->
+          <view class="content webline-2">{{ item.content }}</view>
+          <view class="time-c">{{ item.ctime }}</view>
         </view>
       </view>
     </scroll-view>
@@ -16,34 +15,38 @@
 <script lang="ts">
 import { navigateTo } from '@tarojs/taro'
 import { defineComponent, reactive, ref } from 'vue'
+import * as PublishService from '@/service/PublishService'
 export default defineComponent({
   setup() {
     const query = reactive({
-      page: 1,
-      size: 10
+      pageUtil: {
+        page: 1,
+        limit: 10
+      }
     })
-    const list = reactive([])
+    const list: any[] = reactive([])
     const total = ref(0)
     function handleViewDetail(item) {
       navigateTo({
-        url: `/pages/publish-detail/index?id=${item?.id}`
+        url: `/pages/publish-detail/index?id=${item?.id || ''}`
       })
     }
 
     function handleLoadMore() {
       if (total.value < list.length) {
-        query.page++
+        query.pageUtil.page++
         getList()
       }
     }
     function getList() {
-      // TODO: 获取公告接口
-      console.log('获取公告接口')
-
+      PublishService.getPublishList(query).then(res => {
+        total.value = res.data.count
+        list.push(...(res.data.data || []))
+      })
     }
     getList()
     return {
-      query,
+      list,
       handleViewDetail,
       handleLoadMore
     }
@@ -66,6 +69,11 @@ export default defineComponent({
         .content {
           font-size: 12px;
           font-weight: 400;
+        }
+        .time-c {
+          margin-top: 5px;
+          text-align: right;
+          font-size: 12px;
           color: #999;
         }
       }

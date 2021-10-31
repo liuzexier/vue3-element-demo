@@ -14,7 +14,7 @@ type MethodType = 'GET' | 'POST' | 'PUT' | 'DELETE'
 interface Result {
   result?: string
   code: 200 | 601 | number
-  message: string
+  msg: string
   data: any
 }
 
@@ -41,7 +41,8 @@ export const deleteJson = (url, params = {}, config = {}, extraConfig?: IExtraCo
   return sendRequest(url, "DELETE", params, config, extraConfig);
 };
 
-export let DOMAINNAME = "__HOSTNAME__";
+// export let DOMAINNAME = "__HOSTNAME__";
+export let DOMAINNAME = "http://192.168.124.9:8080/bs/client/";
 
 
 function getAxData(url: string, type: MethodType, params: string | any = "", config: IConfig) {
@@ -58,7 +59,7 @@ function getAxData(url: string, type: MethodType, params: string | any = "", con
       header: Object.assign(
         {
           Origin: DOMAINNAME,
-          Cookie: getStorageSync("bearer"),
+          token: getStorageSync("bearer"),
         },
         header
       ),
@@ -79,7 +80,7 @@ function sendRequest(url: string, type: MethodType, params: string | any = "", c
   }
   const requestOptions = getAxData(url, type, params, config)
 
-  const p: Promise<SuccessCallbackResult> = new Promise((resolve, reject) => {
+  const p: Promise<Result> = new Promise((resolve, reject) => {
     request(requestOptions as request.Option<any>).then(
       (res: SuccessCallbackResult) => {
         logColor({ title: 'request', content: url })
@@ -92,22 +93,14 @@ function sendRequest(url: string, type: MethodType, params: string | any = "", c
         res.data && console.log(' res: ', res.data)
         if ([200, 201].includes(res.statusCode)) {
           // if (res.data.code == 200 || res.data.code == 0 || res.data.code == 1 || res.data.code == 2 || res.data.code == 3) {
-          if ([200, 0, 1, 2, 3].includes(res.statusCode)) {
+          if (res.data.code == 200) {
             resolve(res.data)
-          } else if (res.data.code == 601) {
+          } else {
             showToast({
-              title: res.data?.message || '网络繁忙，请刷新重新进入小程序试试',
+              title: res.data.msg,
               icon: 'none'
             })
-            reject(res)
-          } else {
-            if (!extraConfig.hideToast) {
-              showToast({
-                title: res.data.message,
-                icon: 'none'
-              })
-            }
-            reject(res)
+            resolve(res.data)
           }
         } else if (res.statusCode == 401) {
           if (extraConfig.jumpLogin) {
@@ -118,11 +111,10 @@ function sendRequest(url: string, type: MethodType, params: string | any = "", c
           res.defaultState = "no-login";
           reject(res);
         } else {
-          if ([703, 609].includes(res.statusCode)) {
-            res.defaultState = "have-delete";
-          } else {
-            res.defaultState = "server-error";
-          }
+          showToast({
+            title: '网络异常，请检查网络再试',
+            icon: 'none'
+          })
           reject(res);
         }
       }

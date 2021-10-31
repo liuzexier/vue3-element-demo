@@ -6,8 +6,8 @@ export function useRole(): {
   setRole: (any) => void
 } {
   const role: Ref = toRef(store.getters, 'getRole')
-  const setRole = (basicUserInfo) => {
-    store.dispatch('setRole', basicUserInfo)
+  const setRole = (role) => {
+    store.dispatch('setRole', role)
   }
   return {
     role,

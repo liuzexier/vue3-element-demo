@@ -18,10 +18,12 @@
   <custom-tab-bar></custom-tab-bar>
 </template>
 <script lang="ts">
+import { useRole } from '@/common/useRole'
 import { navigateTo } from '@tarojs/taro'
 import { defineComponent, reactive, ref } from 'vue'
 export default defineComponent({
   setup() {
+    const { role } = useRole()
     const query = reactive({
       page: 1,
       size: 10
@@ -40,9 +42,16 @@ export default defineComponent({
 
     }
     function handleAddLiuyan() {
-      navigateTo({
-        url: `/pages/add-liuyan/index`
-      })
+      if (role.value) {
+        navigateTo({
+          url: `/pages/add-liuyan/index`
+        })
+      } else {
+        navigateTo({
+          url: `/pages/login/index`
+        })
+      }
+
     }
     getList()
     return {

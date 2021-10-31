@@ -1,18 +1,18 @@
 <template>
   <view class="travel-c">
     <view class="switch-tab-bar">
-      <nut-tabs v-model="status" v-if="role==='student'">
+      <nut-tabs v-model="status" v-if="role === 'student'">
         <nut-tabpane title="申请中"></nut-tabpane>
         <nut-tabpane title="已通过"></nut-tabpane>
       </nut-tabs>
-      <nut-tabs v-model="status" v-else-if="role==='teacher'">
+      <nut-tabs v-model="status" v-else-if="role === 'teacher'">
         <nut-tabpane title="待审批"></nut-tabpane>
         <nut-tabpane title="已审批"></nut-tabpane>
       </nut-tabs>
     </view>
     <scroll-view class="liuyan-s" :scroll-y="true" @scrolltolower="handleLoadMore">
       <view class="scroll-c">
-        <view class="card-c card" v-for="(item) in 14" :key="item" @tap="handleDetail(item)">
+        <view class="card-c card" v-for="(item) in list" :key="item.id" @tap="handleDetail(item)">
           <view class="title no-overflow">萨菲隆</view>
           <view
             class="content webline-2"
@@ -31,25 +31,37 @@
 import { useRole } from '@/common/useRole'
 import { navigateTo } from '@tarojs/taro'
 import { defineComponent, ref, reactive } from 'vue'
+import * as TravelService from '@/service/TravelService'
+import { useUserInfo } from '@/common/useUserInfo'
 export default defineComponent({
   setup() {
     const status = ref('0')
     const total = ref(0)
     const query = reactive({
-      page: 1,
-      size: 10
+      pageUtil: {
+        page: 1,
+        limit: 10
+      }
     })
-    const list = reactive([])
+    const list: any[] = reactive([])
     const { role } = useRole()
+    const { userInfo } = useUserInfo()
     function handleLoadMore() {
       if (total.value < list.length) {
-        query.page++
+        query.pageUtil.page++
         getList()
       }
     }
     function getList() {
-      // TODO: 获取出行列表
-      console.log('获取出行列表')
+      TravelService.getTravelList({
+        ...query, data: {
+          userId: userInfo.value.id
+        }
+      }).then(res => {
+        // console.log('获取出行列表')
+        total.value = res.data.count
+        list.push(...(res.data?.data || []))
+      })
     }
     function handleAddTravel() {
       navigateTo({
@@ -67,7 +79,8 @@ export default defineComponent({
       status,
       handleAddTravel,
       role,
-      handleDetail
+      handleDetail,
+      list
     }
   }
 })
