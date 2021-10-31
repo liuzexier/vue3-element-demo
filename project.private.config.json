@@ -1,0 +1,54 @@
+{
+  "setting": {},
+  "condition": {
+    "plugin": {
+      "list": []
+    },
+    "game": {
+      "list": []
+    },
+    "gamePlugin": {
+      "list": []
+    },
+    "miniprogram": {
+      "list": [
+        {
+          "name": "修改书籍",
+          "pathName": "pages/books/add-book/index",
+          "query": "_id=fa24ce1a617a732a02d8c87021a317ad",
+          "scene": null
+        },
+        {
+          "name": "新增客户",
+          "pathName": "pages/customer/add-customer/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "销售订单",
+          "pathName": "pages/order/create-order/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "选择书籍",
+          "pathName": "pages/books/select-books/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "订单",
+          "pathName": "pages/order/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "库存",
+          "pathName": "pages/stock/index",
+          "query": "",
+          "scene": null
+        }
+      ]
+    }
+  }
+}
