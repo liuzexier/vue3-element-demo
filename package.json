@@ -70,6 +70,7 @@
 		"@yzfe/svgicon-loader": "^1.1.0",
 		"babel-plugin-import": "^1.13.3",
 		"babel-preset-taro": "3.3.12",
+		"cross-env": "^7.0.3",
 		"eslint": "^6.8.0",
 		"eslint-config-taro": "3.3.12",
 		"eslint-plugin-vue": "^7.20.0",
