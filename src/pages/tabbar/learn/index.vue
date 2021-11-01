@@ -38,7 +38,7 @@ export default defineComponent({
     }
     function handleLearn(item) {
       navigateTo({
-        url: `/pages/learn-detail/index?id=${item.id}`
+        url: `/pages/learn/learn-detail/index?id=${item.id}`
       })
     }
     getList()

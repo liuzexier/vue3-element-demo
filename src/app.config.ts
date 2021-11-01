@@ -5,13 +5,13 @@ export default {
     'pages/tabbar/travel/index',
     'pages/tabbar/liuyan/index',
     'pages/tabbar/setting/index',
+    'pages/tabbar/liuyan/detail/index',
     'pages/login/index',
     'pages/register/index',
-    'pages/publish-detail/index',
-    'pages/add-liuyan/index',
-    'pages/add-travel/index',
-    'pages/learn-detail/index',
-    'pages/tabbar/liuyan/detail/index'
+    'pages/tabbar/publish/publish-detail/index',
+    'pages/tabbar/liuyan/add-liuyan/index',
+    'pages/tabbar/travel/add-travel/index',
+    'pages/tabbar/learn/learn-detail/index',
   ],
   window: {
     backgroundTextStyle: 'light',

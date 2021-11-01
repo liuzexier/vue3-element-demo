@@ -5,7 +5,7 @@ const SET_USERINFO = 'SET_USERINFO'
 const state = {
   // role: '',
   userInfo: {
-    type:1
+    type: ""
   }
 }
 

@@ -42,7 +42,8 @@ export const deleteJson = (url, params = {}, config = {}, extraConfig?: IExtraCo
 };
 
 // export let DOMAINNAME = "__HOSTNAME__";
-export let DOMAINNAME = "http://192.168.124.9:8080/bs/client/";
+// export let DOMAINNAME = "http://192.168.124.9:8080/bs/client/";
+export let DOMAINNAME = "http://project.cxuniversity.top/bs/client/";
 
 
 function getAxData(url: string, type: MethodType, params: string | any = "", config: IConfig) {

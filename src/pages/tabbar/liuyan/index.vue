@@ -53,7 +53,7 @@ export default defineComponent({
     function handleAddLiuyan() {
       if (role.value) {
         navigateTo({
-          url: `/pages/add-liuyan/index`
+          url: `/pages/liuyan/add-liuyan/index`
         })
       } else {
         navigateTo({

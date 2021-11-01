@@ -28,7 +28,7 @@ export default defineComponent({
     const total = ref(0)
     function handleViewDetail(item) {
       navigateTo({
-        url: `/pages/publish-detail/index?id=${item?.id || ''}`
+        url: `/pages/publish/publish-detail/index?id=${item?.id || ''}`
       })
     }
 

@@ -73,7 +73,7 @@ export default defineComponent({
     }
     function handleAddTravel() {
       navigateTo({
-        url: `/pages/add-travel/index`
+        url: `/pages/travel/add-travel/index`
       })
     }
     function handleDetail(item) {
