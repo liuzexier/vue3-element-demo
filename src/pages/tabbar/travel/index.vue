@@ -1,23 +1,24 @@
 <template>
   <view class="travel-c">
     <view class="switch-tab-bar">
-      <nut-tabs v-model="status" v-if="role === 'student'">
-        <nut-tabpane title="申请中"></nut-tabpane>
-        <nut-tabpane title="已通过"></nut-tabpane>
+      <nut-tabs @change="changeTabs" v-model="status" v-if="role === 'student'">
+        <nut-tabpane title="申请中" pane-key="1"></nut-tabpane>
+        <nut-tabpane title="已通过" pane-key="2"></nut-tabpane>
       </nut-tabs>
-      <nut-tabs v-model="status" v-else-if="role === 'teacher'">
-        <nut-tabpane title="待审批"></nut-tabpane>
+      <nut-tabs @change="changeTabs" v-model="status" v-else-if="role === 'teacher'">
+        <nut-tabpane title="待审批" pane-key="1"></nut-tabpane>
         <nut-tabpane title="已审批"></nut-tabpane>
       </nut-tabs>
     </view>
     <scroll-view class="liuyan-s" :scroll-y="true" @scrolltolower="handleLoadMore">
       <view class="scroll-c">
         <view class="card-c card" v-for="(item) in list" :key="item.id" @tap="handleDetail(item)">
+          <!-- TODO: 姓名 -->
           <view class="title no-overflow">萨菲隆</view>
-          <view
-            class="content webline-2"
-          >是法撒旦法师法的数量sad接口发了;沙发垫了;开发萨达拉什福德啊李帅大富科技爱上的看法就爱上了放得开;开发萨达拉什福德啊李帅大富科技爱上的看法就爱上了放得开</view>
-          <view class="time-c">2012-11-11</view>
+          <view class="content webline-2">出行地{{ item.place }}</view>
+          <view class="time-c">体温:{{ item.temperature }}</view>
+          <view class="time-c">出行时间:{{ item.applyDate }}</view>
+          <view class="time-c">状态:{{ item.status }}</view>
         </view>
       </view>
     </scroll-view>
@@ -30,17 +31,24 @@
 <script lang="ts">
 import { useRole } from '@/common/useRole'
 import { navigateTo } from '@tarojs/taro'
-import { defineComponent, ref, reactive } from 'vue'
+import { defineComponent, ref, reactive, computed } from 'vue'
 import * as TravelService from '@/service/TravelService'
 import { useUserInfo } from '@/common/useUserInfo'
 export default defineComponent({
   setup() {
-    const status = ref('0')
+    const status = ref('1')
     const total = ref(0)
     const query = reactive({
       pageUtil: {
         page: 1,
         limit: 10
+      },
+    })
+    const queryStatus = computed(() => {
+      if (role.value === 'student') {
+        return status.value
+      } else {
+        return status.value
       }
     })
     const list: any[] = reactive([])
@@ -55,10 +63,10 @@ export default defineComponent({
     function getList() {
       TravelService.getTravelList({
         ...query, data: {
-          userId: userInfo.value.id
+          userId: role.value === 'student' ? userInfo.value.id : undefined,
+          status: queryStatus.value
         }
       }).then(res => {
-        // console.log('获取出行列表')
         total.value = res.data.count
         list.push(...(res.data?.data || []))
       })
@@ -73,6 +81,11 @@ export default defineComponent({
         url: `/pages/add-travel/index?id=${item.id}&readonly=true`
       })
     }
+    function changeTabs() {
+      query.pageUtil.page = 1
+      list.length = 0
+      getList()
+    }
     getList()
     return {
       handleLoadMore,
@@ -80,7 +93,8 @@ export default defineComponent({
       handleAddTravel,
       role,
       handleDetail,
-      list
+      list,
+      changeTabs
     }
   }
 })

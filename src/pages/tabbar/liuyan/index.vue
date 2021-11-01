@@ -2,7 +2,7 @@
   <view class="liuyan-c">
     <scroll-view class="liuyan-s" :scroll-y="true" @scrolltolower="handleLoadMore">
       <view class="scroll-c">
-        <view class="card-c card" v-for="(item) in 14" :key="item">
+        <view class="card-c card" v-for="(item) in 14" :key="item" @tap="handleDetail">
           <view class="title no-overflow">萨菲隆</view>
           <view
             class="content webline-2"
@@ -21,25 +21,34 @@
 import { useRole } from '@/common/useRole'
 import { navigateTo } from '@tarojs/taro'
 import { defineComponent, reactive, ref } from 'vue'
+import * as LiuyanService from '@/service/LiuyanService'
 export default defineComponent({
   setup() {
     const { role } = useRole()
-    const query = reactive({
-      page: 1,
-      size: 10
+    const query: LiuyanService.MessageQuery = reactive({
+      pageUtil: {
+        page: 1,
+        limit: 10
+      },
+      data: {
+        // TODO: ...参数
+      }
     })
-    const list = reactive([])
+    const list: any = reactive([])
     const total = ref(0)
     function handleLoadMore() {
       if (total.value < list.length) {
-        query.page++
+        query.pageUtil.page++
         getList()
       }
     }
     function getList() {
-      // TODO: 获取留言接口
-      console.log('获取留言接口')
-
+      LiuyanService.getMessageList(query).then(res => {
+        if (res.code == 200) {
+          total.value = res.data.count
+          list.push(...(res.data.data || []))
+        }
+      })
     }
     function handleAddLiuyan() {
       if (role.value) {
@@ -51,13 +60,17 @@ export default defineComponent({
           url: `/pages/login/index`
         })
       }
-
+    }
+    function handleDetail(item) {
+      navigateTo({
+        url: `/pages/tabbar/liuyan/detail/index?id=${item?.id || ''}`
+      })
     }
     getList()
     return {
-      query,
       handleLoadMore,
-      handleAddLiuyan
+      handleAddLiuyan,
+      handleDetail
     }
   }
 })

@@ -29,6 +29,18 @@
           "pathName": "pages/tabbar/setting/index",
           "query": "",
           "scene": null
+        },
+        {
+          "name": "出行",
+          "pathName": "pages/tabbar/travel/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "留言列表",
+          "pathName": "pages/tabbar/liuyan/index",
+          "query": "",
+          "scene": null
         }
       ]
     }

@@ -29,6 +29,14 @@ declare interface PageConfig {
   singlePage?: any // 单页模式相关配置	
 }
 
+declare interface PageUtil {
+  page: number,
+  limit: number
+}
+declare interface PageQuery {
+  pageUtil: PageUtil,
+  data?: any
+}
 
 
 declare namespace __wxConfig { }

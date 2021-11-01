@@ -4,9 +4,12 @@
       <view class="left">
         <svg-icon width="50" height="50" :data="require('@icons/icon-mine.svg')"></svg-icon>
       </view>
-      <view class="right">
-        <view class="title no-overflow">{{ userInfo.username }}</view>
-        <view class="desc no-overflow">{{ userInfo.phone }}</view>
+      <view class="right" v-if="role !== ''">
+        <view class="title no-overflow">你好{{ userInfo.username || '用户名' }}</view>
+        <view class="desc no-overflow">{{ userInfo.phone || '手机号码' }}</view>
+      </view>
+      <view v-else class="right">
+        <view class="title no-overflow">请登录</view>
       </view>
     </view>
     <view class="menu-c">

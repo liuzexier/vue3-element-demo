@@ -3,8 +3,10 @@ const SET_ROLE = 'SET_ROLE'
 const SET_USERINFO = 'SET_USERINFO'
 
 const state = {
-  role: '',
-  userInfo: {}
+  // role: '',
+  userInfo: {
+    type:1
+  }
 }
 
 const mutations = {

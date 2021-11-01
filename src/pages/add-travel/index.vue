@@ -1,10 +1,30 @@
 <template>
   <view class="add-liuyan-c">
     <view class="info-card">
-      <nut-input :disabled="disabled" label="姓名" placeholder="请输入姓名"></nut-input>
-      <nut-input :disabled="disabled" label="班级" placeholder="请输入班级"></nut-input>
-      <CommonPicker :disabled="disabled" label="开始时间" placeholder="请选择开始时间" mode="date"></CommonPicker>
-      <CommonPicker :disabled="disabled" label="结束时间" placeholder="请选择结束时间" mode="date"></CommonPicker>
+      <!-- <nut-input :disabled="disabled" label="姓名" placeholder="请输入姓名"></nut-input> -->
+      <!-- <nut-input :disabled="disabled" label="班级" placeholder="请输入班级"></nut-input> -->
+      <nut-input
+        type="digit"
+        :disabled="disabled"
+        v-model="data.temperature"
+        label="体温"
+        placeholder="请输入体温"
+      ></nut-input>
+      <nut-input
+        type="digit"
+        :disabled="disabled"
+        v-model="data.place"
+        label="地点"
+        placeholder="请输入地点"
+      ></nut-input>
+      <CommonPicker
+        :disabled="disabled"
+        label="时间"
+        placeholder="请选择时间"
+        mode="date"
+        v-model="data.applyDate"
+      ></CommonPicker>
+      <!-- <CommonPicker :disabled="disabled" label="结束时间" placeholder="请选择结束时间" mode="date"></CommonPicker> -->
     </view>
     <view class="info-card">
       <view class="title">原因</view>
@@ -18,16 +38,17 @@
       @tap="handleCommit"
     >确定</nut-button>
     <template v-else-if="role === 'teacher'">
-      <nut-button size="large" type="success">通过</nut-button>
-      <nut-button size="large" type="danger">驳回</nut-button>
+      <nut-button @tap="handleChangeStatus('2')" size="large" type="success">通过</nut-button>
+      <nut-button @tap="handleChangeStatus('3')" size="large" type="danger">驳回</nut-button>
     </template>
   </view>
 </template>
 <script lang='ts'>
 import { Current, navigateBack, setNavigationBarTitle, showToast } from '@tarojs/taro'
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, reactive } from 'vue'
 import CommonPicker from '@/components/common-picker/index.vue'
 import { useRole } from '@/common/useRole'
+import * as TravelService from '@/service/TravelService'
 export default defineComponent({
   components: {
     CommonPicker
@@ -37,29 +58,57 @@ export default defineComponent({
     const readonly: any = Current.page?.options?.readonly
     const disabled = ref(false)
     const { role } = useRole()
+
+    const data = reactive({
+      place: '',
+      temperature: '',
+      applyDate: ''
+    })
     function handleCommit() {
-      // TODO: 提交申请出行
-      showToast({ title: '提交成功' }).then(() => {
-        setTimeout(() => {
-          navigateBack()
-        }, 1000);
+      TravelService.addTravel({
+        ...data,
+        status: 1
+      }).then(res => {
+        if (res.code == 200) {
+          showToast({ title: '提交成功' }).then(() => {
+            setTimeout(() => {
+              navigateBack()
+            }, 1000);
+          })
+        }
       })
+
     }
     function getData() {
       if (id) {
-        // TODO: 获取申请详情
-
+        TravelService.getTravel({ id }).then(res => {
+          if (res.code == 200) {
+            Object.assign(data, res.data)
+          }
+        })
       }
       if (readonly === 'true') {
         disabled.value = true
         setNavigationBarTitle({ title: '出行审批' })
       }
     }
+    function handleChangeStatus(data) {
+      TravelService.travelApply({
+        id,
+        status: data
+      }).then(res => {
+        if (res.code == 200) {
+          showToast({ title: '审批完成' })
+        }
+      })
+    }
     getData()
     return {
       disabled,
       role,
-      handleCommit
+      handleCommit,
+      data,
+      handleChangeStatus
     }
   }
 })

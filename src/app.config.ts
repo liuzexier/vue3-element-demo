@@ -11,6 +11,7 @@ export default {
     'pages/add-liuyan/index',
     'pages/add-travel/index',
     'pages/learn-detail/index',
+    'pages/tabbar/liuyan/detail/index'
   ],
   window: {
     backgroundTextStyle: 'light',
